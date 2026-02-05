@@ -1,5 +1,4 @@
-from pkm_sim_api.database import get_database
-from pkm_sim_api.models.pkm_sim_api_exception import PokemonSimAPIException
+from ..database import get_database
 
 
 class BaseRepository:
