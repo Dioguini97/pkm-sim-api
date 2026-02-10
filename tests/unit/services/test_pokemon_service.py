@@ -1,7 +1,6 @@
 import pytest
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
+from unittest.mock import Mock, patch
 from pkm_sim_api.services.pokemon_service import PokemonService
-from pkm_sim_api.models.pkm_sim_api_exception import PokemonSimAPIException
 from pkm_sim_commons import Pokemon
 
 

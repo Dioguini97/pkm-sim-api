@@ -13,8 +13,7 @@ load_dotenv(dotenv_path=env_path, override=True)
 os.environ['TESTING'] = '1'
 
 from src.pkm_sim_api.main import app
-from src.pkm_sim_api.database import get_database
-from src.pkm_sim_api.config import settings
+from pkm_sim_api.configs.config import settings
 
 
 @pytest.fixture

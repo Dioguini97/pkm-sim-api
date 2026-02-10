@@ -20,7 +20,8 @@ class PokeAPIClient(BaseAPIClient):
         }
 
     async def get_evolution_chain(self, id: int):
-        return await self.get(f'/evolution_chain/{id}')
+        response = await self.get(f'/evolution-chain/{id}')
+        return response
 
     async def get_ability(self, name_or_id: str | int) -> Dict[str, Any]:
         """Busca informações de uma habilidade"""

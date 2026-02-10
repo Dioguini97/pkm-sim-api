@@ -1,35 +1,45 @@
-from ..database import get_database
+from pkm_sim_api.configs.database import get_database
+from pkm_sim_api.configs.pkm_sim_api_exception import PokemonSimAPIException
 
 
 class BaseRepository:
     def __init__(self, collection_name):
         self.collection_name = collection_name
 
-    async def create(self, data: dict):
+    async def create(self, data):
         db = await get_database()
-        db[self.collection_name].insert_one(data)
+        try:
+            result = await db[self.collection_name].insert_one(data)
+        except PokemonSimAPIException as e:
+            raise PokemonSimAPIException(
+                f'Error trying to save {data} to Mongo DB!', 500
+            )
 
     async def update(self, pokedex_num: int, data: dict):
         db = await get_database()
-        db[self.collection_name].update_one(
+        result = await db[self.collection_name].update_one(
             {'pokedex_num': pokedex_num},
             {'$set': data}
         )
+        return result.raw_result
 
     async def delete(self, pokedex_num: int):
         db = await get_database()
-        db[self.collection_name].delete_one(
+        result = await db[self.collection_name].delete_one(
             {'pokedex_num': pokedex_num}
         )
+        return result.raw_result
 
     async def find_by_id(self, id: int):
         db = await get_database()
-        db[self.collection_name].find_one(
+        result = await db[self.collection_name].find_one(
             {'id': id}
         )
+        return result
 
     async def find_by_name(self, name: int):
         db = await get_database()
-        db[self.collection_name].find_one(
+        result = await db[self.collection_name].find_one(
             {'name': name}
         )
+        return result

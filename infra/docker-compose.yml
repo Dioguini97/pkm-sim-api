@@ -1,17 +1,43 @@
-version: '3.8'
-
 services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: senha123
     volumes:
       - mongodb_data:/data/db
     restart: unless-stopped
+    networks:
+      - pkm-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - pkm-network
+
+  api:
+    build:
+      context: ../..  # ← Sobe 2 níveis para incluir pkm-sim-commons
+      dockerfile: pkm-sim-api/Dockerfile
+    container_name: pkm-sim-api
+    ports:
+      - "8000:8000"
+    environment:
+      MONGODB_URL: mongodb://admin:senha123@mongodb:27017
+      DATABASE_NAME: pkm-sim-db
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - pkm-network
 
 volumes:
   mongodb_data:
+
+networks:
+  pkm-network:
+    driver: bridge
