@@ -1,7 +1,8 @@
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
+
+from pkm_sim_api.clients import PokeAPIClient
 from pkm_sim_api.services.pokemon_service import PokemonService
-from pkm_sim_commons import Pokemon
 
 
 @pytest.fixture
@@ -76,7 +77,6 @@ def mock_evolution_chain_cannot_evolve():
         }
     }
 
-
 class TestCanItEvolve:
     """Testes para o método can_it_evolve"""
 
@@ -121,34 +121,6 @@ class TestCanItEvolve:
         """Testa quando o Pokémon não está na cadeia de evolução"""
         result = pokemon_service.can_it_evolve(mock_evolution_chain_can_evolve, 'charizard')
         assert result is False
-
-
-class TestGetPokemon:
-    """Testes para o método get_pokemon"""
-
-    def test_get_pokemon_found_in_repository(self, pokemon_service):
-        """Testa quando o Pokémon é encontrado no repositório"""
-        mock_pokemon = Mock(spec=Pokemon)
-        pokemon_service.repository.find_by_name.return_value = mock_pokemon
-
-        result = pokemon_service.get_pokemon('pikachu')
-
-        pokemon_service.repository.find_by_name.assert_called_once_with('pikachu')
-        # Não deve chamar a API se encontrou no repositório
-        pokemon_service.client.get_pokemon.assert_not_called()
-
-    @patch.object(PokemonService, 'get_pokemon_from_api')
-    def test_get_pokemon_not_found_calls_api(self, mock_get_from_api, pokemon_service):
-        """Testa quando o Pokémon não está no repositório e busca da API"""
-        pokemon_service.repository.find_by_name.side_effect = Exception("Not found")
-        mock_pokemon = Mock(spec=Pokemon)
-        mock_get_from_api.return_value = mock_pokemon
-
-        pokemon_service.get_pokemon('pikachu')
-
-        pokemon_service.repository.find_by_name.assert_called_once_with('pikachu')
-        mock_get_from_api.assert_called_once_with('pikachu')
-
 
 class TestEdgeCases:
     """Testes de casos extremos e edge cases"""

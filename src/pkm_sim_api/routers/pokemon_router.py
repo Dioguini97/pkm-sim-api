@@ -30,8 +30,8 @@ async def get_pokemon(name: str):
         #
         #     except Exception as e:
         #         print(f'Erro ao salvar na cache: {e}')
-
-        return pkm
+        else:
+            return pkm
     except PokemonSimAPIException as e:
         raise PokemonSimAPIException(status_code=500, message=str(e))
 

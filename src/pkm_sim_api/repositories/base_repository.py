@@ -37,7 +37,7 @@ class BaseRepository:
         )
         return result
 
-    async def find_by_name(self, name: int):
+    async def find_by_name(self, name: str):
         db = await get_database()
         result = await db[self.collection_name].find_one(
             {'name': name}

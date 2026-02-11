@@ -1,5 +1,4 @@
 from fastapi import APIRouter, status
-from pkm_sim_commons import Pokemon
 
 from pkm_sim_api.schemas.competitive_pokemon_schema import CompetitivePokemonSchema
 from pkm_sim_api.services.competitive_pokemon_service import CompetitivePokemonService

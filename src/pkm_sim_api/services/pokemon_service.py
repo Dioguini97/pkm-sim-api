@@ -13,14 +13,9 @@ class PokemonService:
         try:
             pkm = await self.repository.find_by_name(name)
             if pkm:
-                return Pokemon(
-                    pokedex_num=pkm['pokedex_num'], name=pkm['name'], can_evolve=pkm['can_evolve'],
-                    types=[PokemonType(_type) for _type in pkm['types']], base_stats=pkm['base_stats'],
-                    abilities=[abl for abl in pkm['abilities']],
-                    height=pkm['height'], weight=pkm['weight'], move_list=pkm['move_list'],
-                    img_url=pkm['img_url'], crie_url=pkm['crie_url'], varieties=pkm['varieties']
-                )
-            return await self.get_pokemon_from_api(name)
+                return Pokemon.from_dict(pkm)
+            else:
+                return await self.get_pokemon_from_api(name)
         except PokemonSimAPIException as e:
             raise PokemonSimAPIException(
                 f'Pokemon com nome {name} não existe!', status_code=500
@@ -58,6 +53,6 @@ class PokemonService:
                     img_url=pkm['sprites']['front_default'], crie_url=pkm['cries']['latest'], varieties=specie['varieties']
                 )
                 await self.repository.create(pokemon.__dict__)
-                return pokemon
+                return pokemon.to_dict()
             except PokemonSimAPIException as e:
                 raise PokemonSimAPIException(f'Error getting Pokemon: {name_or_id}')

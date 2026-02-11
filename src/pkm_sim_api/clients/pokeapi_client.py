@@ -1,6 +1,8 @@
 from .base_client import BaseAPIClient
 from typing import Dict, Any
 
+from ..configs.pkm_sim_api_exception import PokemonSimAPIException, ErrorCode
+
 
 class PokeAPIClient(BaseAPIClient):
     def __init__(self):
@@ -29,7 +31,13 @@ class PokeAPIClient(BaseAPIClient):
 
     async def get_move(self, name_or_id: str | int) -> Dict[str, Any]:
         """Busca informações de um movimento"""
-        return await self.get(f"/move/{name_or_id}")
+        try:
+            return await self.get(f"/move/{name_or_id}")
+        except Exception as e:
+            raise PokemonSimAPIException(message=f'Error from PokeApi getting move: {name_or_id}', status_code=500, error_code=ErrorCode.FEING_CLIENT_ERROR)
 
-    async def get_item(self, name_or_id: str | int):
-        return await self.get(f'/item/{name_or_id}')
+    async def get_item(self, name_or_id: str | int) -> Dict[str, Any]:
+        try:
+            return await self.get(f'/item/{name_or_id}')
+        except:
+            raise PokemonSimAPIException(message=f'Error from PokeApi getting item: {name_or_id}', status_code=500, error_code=ErrorCode.FEING_CLIENT_ERROR)
