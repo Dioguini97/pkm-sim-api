@@ -1,5 +1,6 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
+from pkm_sim_api.configs.auth_handler import get_current_user
 from pkm_sim_api.schemas.competitive_pokemon_schema import CompetitivePokemonSchema
 from pkm_sim_api.services.competitive_pokemon_service import CompetitivePokemonService
 
@@ -8,5 +9,6 @@ comp_pkm_serv = CompetitivePokemonService()
 
 
 @router.post('', status_code=status.HTTP_201_CREATED)
-async def create_competitive_pokemon(body: CompetitivePokemonSchema) -> None:
+async def create_competitive_pokemon(body: CompetitivePokemonSchema, user=Depends(get_current_user)) -> str:
     await comp_pkm_serv.create_competitive_pokemon(body.model_dump())
+    return 'Created'
