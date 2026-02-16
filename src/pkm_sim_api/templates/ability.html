@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Ability</title>
+</head>
+<body>
+
+<h2>Create Ability</h2>
+
+<input type="text" id="name" placeholder="Ability Name">
+<br><br>
+<textarea id="description" placeholder="Description"></textarea>
+<br><br>
+
+<button class="submit-btn" onclick="createAbility()">Submit</button>
+
+<script>
+async function createAbility() {
+
+    const data = {
+        name: document.getElementById("name").value,
+        description: document.getElementById("description").value
+    };
+
+    const response = await fetch("/abilities/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    alert("Response: " + JSON.stringify(result));
+}
+</script>
+
+</body>
+</html>

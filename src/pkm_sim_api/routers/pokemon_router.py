@@ -35,3 +35,7 @@ async def get_pokemon(name: str):
     except PokemonSimAPIException as e:
         raise PokemonSimAPIException(status_code=500, message=str(e))
 
+@router.get('/pkm/all')
+async def get_all():
+    return await pokemon_service.get_all()
+

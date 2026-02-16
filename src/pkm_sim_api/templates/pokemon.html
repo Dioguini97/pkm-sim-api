@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Pokemon</title>
+</head>
+<body>
+
+<h2>Create Pokemon</h2>
+
+<input type="text" id="pokemonInput" list="pokemonList" placeholder="Pokemon Name">
+<datalist id="pokemonList"></datalist>
+<select id="pokemonSelect">
+    <option value="">Seleciona um Pokemon...</option>
+</select>
+<br><br>
+<textarea id="description" placeholder="Description"></textarea>
+<br><br>
+
+<button class="submit-btn" onclick="createPokemon()">Submit</button>
+<script src="/static/gui.js"></script>
+</body>
+</html>

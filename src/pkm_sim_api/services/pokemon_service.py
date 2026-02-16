@@ -46,9 +46,9 @@ class PokemonService:
                 specie = await client.get_pokemon_species(name_or_id)
                 evo_chain = await client.get_evolution_chain(specie['evolution_chain_url'].split('/')[-2])
                 pokemon = Pokemon(
-                    pokedex_num=pkm['id'], name=pkm['name'], can_evolve=self.can_it_evolve(evo_chain, specie['name']),
+                    name=pkm['name'], can_evolve=self.can_it_evolve(evo_chain, specie['name']),
                     types=[PokemonType(_type['type']['name']) for _type in pkm['types']], base_stats={transform_stat_name(stat['stat']['name']): stat['base_stat'] for stat in pkm['stats']},
-                    abilities=[abl['ability']['name'] for abl in pkm['abilities']],
+                    abilities=[abl['ability']['name'] for abl in pkm['abilities']], id=pkm['id'],
                     height=pkm['height'], weight=pkm['weight'], move_list=[move['move']['name'] for move in pkm['moves']],
                     img_url=pkm['sprites']['front_default'], crie_url=pkm['cries']['latest'], varieties=specie['varieties']
                 )
@@ -56,3 +56,7 @@ class PokemonService:
                 return pokemon.to_dict()
             except PokemonSimAPIException as e:
                 raise PokemonSimAPIException(f'Error getting Pokemon: {name_or_id}')
+
+    async def get_all(self):
+        result = await self.repository.find_all()
+        return [p['name'] for p in result]

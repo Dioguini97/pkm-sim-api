@@ -10,7 +10,7 @@ user_repository = UserRepository()
 @router.post('/login')
 async def login(payload: dict):
     username = payload.get('username')
-    psw = payload.get('psw')
+    psw = payload.get('password')
 
     user = await user_repository.find_by_username(username)
 
